@@ -7,6 +7,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private string mouseLeftClickInputName;
     [SerializeField] private Camera playerCamera;
     [SerializeField] private float shotSpeed;
+    [SerializeField] private GameObject playerHitIndicator;
     private float startPoint;
     private float endPoint;
     [SerializeField] private LayerMask floor;
@@ -36,7 +37,6 @@ public class PlayerMove : MonoBehaviour
             if (Physics.Raycast(ray, out hit, floor))
             {
                 Debug.DrawLine(ray.origin, hit.point);
-
                 StartCoroutine(playerMoveAlongRay(hit));
             }
         }
@@ -44,6 +44,7 @@ public class PlayerMove : MonoBehaviour
     }
 
     private IEnumerator playerMoveAlongRay(RaycastHit hit) {
+        GameObject playerHit = Instantiate(playerHitIndicator, hit.point, Quaternion.identity) as GameObject;
         isInAir = true;
 
         Vector3 endPoint = hit.point;
@@ -59,6 +60,7 @@ public class PlayerMove : MonoBehaviour
         }
 
         isInAir = false;
+        Destroy(playerHit);
         yield return null;
     }
 
